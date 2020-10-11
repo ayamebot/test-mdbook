@@ -1,0 +1,103 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    # runs-on: macos-latest
+    # runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read .env
+        id: mdbook_version
+        run: |
+          . ./.env
+          echo "::set-output name=mdbook_version::${MDBOOK_VERSION}"
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          # mdbook-version: '${{ steps.mdbook_version.outputs.mdbook_version }}'
+          # mdbook-version: 'latest'
+          mdbook-version: '0.3.7'
+
+#      - name: Install mdbook-linkcheck
+#        run: |
+#          curl -LSfs https://japaric.github.io/trust/install.sh | \
+#            sh -s -- --git Michael-F-Bryan/mdbook-linkcheck
+
+      - run: mdbook build
+
+#       - name: Symlink
+#         run: |
+#           echo "Symlink" > ./symlink.txt
+#           cd ./book
+#           ln -s ../symlink.txt ./symlink.txt
+      #- run: ls -la ./book
+      #- run: rsync -rptgoDv --copy-links --copy-dirlinks ./book/ ./book-dist/
+      #- run: ls -la ./book-dist
+
+      - name: Deploy
+        if: runner.os != 'Windows'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          # github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: master
+          publish_dir: ./book
+          # external_repository: ''
+          allow_empty_commit: true
+          # keep_files: true
+          # force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          # commit_message: ${{ github.event.head_commit.message }}
+          # tag_name: ${{ steps.prepare_tag.outputs.deploy_tag_name }}
+          # tag_message: 'Deployment ${{ steps.prepare_tag.outputs.tag_name }}'
+          # enable_jekyll: true
+          # disable_nojekyll: true
+          cname: 'test-mdbook.peaceiris.com'
+
+#       - name: Deploy
+#         if: runner.os == 'Windows'
+#         # if: runner.os != 'Windows'
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           # publish_branch: master
+#           publish_dir: ./book
+#           cname: 'test-mdbook.peaceiris.com'
+#           # external_repository: ''
+#           allow_empty_commit: true
+#           # keep_files: true
+#           # force_orphan: true
+#           # user_name: iris
+#           # user_email: email@peaceiris.com
+#           # commit_message: ${{ github.event.head_commit.message }}
+#           # tag_name: ${{ steps.prepare_tag.outputs.deploy_tag_name }}
+#           # tag_message: 'Deployment ${{ steps.prepare_tag.outputs.tag_name }}'
+
+#  mdbook:
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os:
+#          - 'ubuntu-18.04'
+#          # - 'macos-latest'
+#          # - 'windows-latest'
+#        mdbook-version: ['latest', '0.3.4']
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup mdbook
+#        uses: peaceiris/actions-mdbook@v1
+#        with:
+#          mdbook-version: ${{ matrix.mdbook-version }}
+#
+#      - run: mdbook --version
