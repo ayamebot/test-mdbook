@@ -41,10 +41,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # publish_branch: gh-pages
           publish_dir: ./book
-          destination_dir: subdir-1
+          # destination_dir: subdir-1
           # external_repository: ''
           allow_empty_commit: true
-          keep_files: true
+          # keep_files: true
           # force_orphan: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
