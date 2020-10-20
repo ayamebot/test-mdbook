@@ -38,13 +38,13 @@ jobs:
 
       - name: Deploy
 #         uses: peaceiris/actions-gh-pages@v3.7.2
-        uses: peaceiris/actions-gh-pages@3d1f363
+        uses: peaceiris/actions-gh-pages@ed9896e
         with:
           # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # publish_branch: gh-pages
           publish_dir: ./book
-          # destination_dir: subdir-1
+          destination_dir: subdir-1
           # external_repository: ''
           allow_empty_commit: true
           # keep_files: true
