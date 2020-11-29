@@ -13,8 +13,6 @@ jobs:
     # runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
 
       - name: Read .env
         id: mdbook_version
@@ -37,8 +35,7 @@ jobs:
       - run: mdbook build
 
       - name: Deploy
-#         uses: peaceiris/actions-gh-pages@v3.7.2
-        uses: peaceiris/actions-gh-pages@ed9896e
+        uses: peaceiris/actions-gh-pages@v3
         with:
           # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +45,7 @@ jobs:
           # external_repository: ''
           allow_empty_commit: true
           # keep_files: true
-          force_orphan: true
+          # force_orphan: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           # commit_message: ${{ github.event.head_commit.message }}
